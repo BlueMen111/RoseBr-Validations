@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RoseOnBr — Validação do Patch</title>
+  <meta name="description" content="Notas do patch e checklist de testes da RoseOnBr.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌹</text></svg>">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">RoseOnBr · Servidor de testes</p>
+      <h1>Validação do Patch</h1>
+      <p class="lead">Teste cada item, marque <b>Passou</b> ou <b>Falhou</b>, escreva o que achou e, no fim, clique em <b>Copiar relatório</b> e mande para a equipe.</p>
+    </div>
+  </header>
+
+  <div class="toolbar" id="toolbar">
+    <div class="toolbar-inner">
+      <label class="tester">
+        <span>Seu nome</span>
+        <input id="tester" type="text" maxlength="40" placeholder="Nick no jogo" autocomplete="off">
+      </label>
+      <div class="overall">
+        <div class="overall-top">
+          <span id="overallText">0 de 0 testados</span>
+          <span class="chips"><span class="chip ok" id="cntOk">0 ✓</span><span class="chip bad" id="cntBad">0 ✗</span></span>
+        </div>
+        <div class="bar"><div class="bar-ok" id="barOk"></div><div class="bar-bad" id="barBad"></div></div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="btnCopy" type="button">Copiar relatório</button>
+        <button class="btn ghost" id="btnDownload" type="button" title="Baixar o relatório em .txt">.txt</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-tab="tests" role="tab">Validações</button>
+      <button class="tab" data-tab="notes" role="tab">Notas do patch</button>
+    </nav>
+
+    <section id="tab-tests" class="tab-panel">
+      <div class="filters" role="group" aria-label="Filtro">
+        <button class="filter active" data-filter="all">Todos</button>
+        <button class="filter" data-filter="pending">Pendentes</button>
+        <button class="filter" data-filter="ok">Passou</button>
+        <button class="filter" data-filter="bad">Falhou</button>
+        <button class="filter reset" id="btnReset" type="button">Limpar tudo</button>
+      </div>
+      <div id="sections"></div>
+    </section>
+
+    <section id="tab-notes" class="tab-panel" hidden>
+      <div id="notes" class="notes-grid"></div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    O progresso fica salvo só neste navegador. Para enviar, use <b>Copiar relatório</b>.
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
