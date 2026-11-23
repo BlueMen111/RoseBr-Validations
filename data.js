@@ -54,6 +54,17 @@ window.PATCH_NOTES = [
     }
   },
   {
+    title: "Objetivos do Game Arena",
+    items: [
+      "Novo botão \"Objetivos\" na janela da Game Arena: missões diárias, semanais e de temporada (28 dias).",
+      "Clique em \"Iniciar\" na missão e jogue os eventos da Game Arena: participar, vencer, abater, não morrer, ficar no top 3 e mais.",
+      "Cada missão concluída dá pontos. Chegou na meta do período, resgate o baú (diário 20, semanal 140, temporada 560 pontos).",
+      "Rastreio na tela com as missões em andamento: dá para arrastar, recolher e trocar de página.",
+      "Dá para desistir de uma missão em andamento (o progresso dela zera).",
+      "A diária vira às 00:00, a semanal na segunda-feira e a temporada a cada 28 dias."
+    ]
+  },
+  {
     title: "Bosses — novo calendário",
     table: {
       head: ["Dia", "Boss", "Horário"],
@@ -196,7 +207,10 @@ window.PATCH_NOTES = [
       "Cart: ao usar teleporte, o cart ficava invertido e bugado.",
       "Pedir duelo desconectava o jogador: agora o convite chega normalmente.",
       "Roupa do pet vencida atualiza o visual do pet para todos.",
-      "O pet não dá mais Arua's Blessing a cada login."
+      "O pet não dá mais Arua's Blessing a cada login.",
+      "Consumíveis: ao usar um item, só ele fica escuro (antes escurecia o grupo todo, ex.: todos os scrolls por 3 segundos).",
+      "O jogo não fecha mais quando uma skill de efeito contínuo (cura/regeneração) atinge outro jogador ou monstro.",
+      "O jogo não fecha mais ao carregar certos mapas (iluminação dos objetos)."
     ]
   }
 ];
@@ -461,7 +475,57 @@ window.VALIDATIONS = [
         expected: "Ninguém desconecta e o convite chega normalmente." },
       { id: "fix-pet", title: "Pet",
         steps: ["Deixe a roupa do pet vencer.", "Relogue algumas vezes."],
-        expected: "O pet perde a roupa para todos; você não ganha Arua's Blessing a cada login." }
+        expected: "O pet perde a roupa para todos; você não ganha Arua's Blessing a cada login." },
+      { id: "fix-consumivel", title: "Escurecimento dos consumíveis",
+        steps: ["Coloque na barra vários scrolls (teleporte, buff) e várias poções.", "Use um scroll e depois uma poção."],
+        expected: "Só o item usado fica escuro. Tentar usar outro do mesmo grupo logo em seguida ainda mostra \"não pode usar duas vezes\"." },
+      { id: "fix-skill-continua", title: "Skill de cura/regeneração em outros",
+        steps: ["Em grupo, use skills de cura e regeneração nos colegas e em você.", "Fique perto de monstros que usam skills de efeito contínuo."],
+        expected: "O jogo não fecha; o HP/MP sobe normalmente." },
+      { id: "fix-mapas", title: "Andar e teleportar entre mapas",
+        steps: ["Ande e teleporte por vários mapas (cidades, Luna, Eldeon, Oro, dungeons).", "Depois veja se apareceu o arquivo LightMapErro.txt na pasta do jogo."],
+        expected: "O jogo não fecha. Se o LightMapErro.txt aparecer, mande para a equipe (ele mostra qual mapa tem a iluminação errada)." }
+    ]
+  },
+  {
+    id: "arenaobj", name: "Objetivos do Game Arena", icon: "🎯",
+    tests: [
+      { id: "ao-abrir", title: "Abrir a janela",
+        steps: ["Abra a Game Arena e clique em \"Objetivos\" (na linha das abas PvP/PvM/PvE)."],
+        expected: "A janela abre à esquerda da Game Arena, com as abas Diária, Semanal e Temporada, 3 missões por página e o baú embaixo." },
+      { id: "ao-temas", title: "Tema vermelho e azul",
+        steps: ["Troque o tema em Alt+O com a janela e o rastreio abertos."],
+        expected: "A janela, o botão e o rastreio aparecem certos nos dois temas." },
+      { id: "ao-iniciar", title: "Iniciar missão",
+        steps: ["Clique em \"Iniciar\" numa missão."],
+        expected: "O botão vira \"Em andamento\", aparece \"Desistir\" ao lado e a missão entra no rastreio." },
+      { id: "ao-desistir", title: "Desistir da missão",
+        steps: ["Clique em \"Desistir\" (vira \"Confirmar?\") e clique de novo em até 4 segundos.", "Repita esperando mais de 4 segundos no segundo clique."],
+        expected: "Com os 2 cliques: \"Você desistiu da missão\" e ela volta para \"Iniciar\" com progresso 0. Esperando demais: nada acontece." },
+      { id: "ao-progresso", title: "Progresso no evento",
+        steps: ["Inicie missões de participar, vencer e abater.", "Jogue um evento da Game Arena até o fim (fique pelo menos metade do tempo)."],
+        expected: "O progresso sobe no fim do evento e aparece \"Missão concluída: ...\" no chat quando completa." },
+      { id: "ao-presenca", title: "Presença mínima",
+        steps: ["Inscreva-se num evento e saia logo no começo."],
+        expected: "As missões não contam esse evento." },
+      { id: "ao-bau", title: "Resgatar o baú",
+        steps: ["Com os pontos da meta, clique em \"Resgatar baú\".", "Clique de novo."],
+        expected: "Recebe o baú uma vez só; no segundo clique aparece \"Você já resgatou este baú\"." },
+      { id: "ao-bau-cheio", title: "Baú com inventário cheio",
+        steps: ["Encha o inventário e tente resgatar o baú."],
+        expected: "Aparece \"Inventário cheio\" e o baú continua disponível para depois." },
+      { id: "ao-rastreio", title: "Rastreio na tela",
+        steps: ["Arraste o rastreio pela barra \"Objetivos\".", "Mova o minimapa.", "Use –/+ e < >.", "Relogue."],
+        expected: "O rastreio não acompanha o minimapa, fica onde você deixou depois de relogar e o –/+ e as páginas funcionam." },
+      { id: "ao-trocar-char", title: "Trocar de personagem",
+        steps: ["Com missões em andamento, troque de personagem."],
+        expected: "O rastreio continua na tela e mostra só as missões do personagem novo." },
+      { id: "ao-viradas", title: "Virada do dia",
+        steps: ["Deixe uma missão diária em andamento e passe da meia-noite."],
+        expected: "A lista diária muda e o progresso da diária começa do zero." },
+      { id: "ao-dup", title: "Cliques rápidos",
+        steps: ["Clique muito rápido em Iniciar, Desistir, Resgatar e nas abas."],
+        expected: "Aparece \"Aguarde um momento\" quando passa do limite; nada duplica e o jogo não trava." }
     ]
   },
   {
