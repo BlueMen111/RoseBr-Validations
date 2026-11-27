@@ -129,9 +129,26 @@ window.PATCH_NOTES = [
   {
     title: "Glow (brilho dos itens)",
     items: [
-      "Brilho 30% mais suave em todos os itens.",
+      "Brilho 15% mais suave em todos os itens.",
       "Nova opção \"Brilho não atravessa objetos\" (ligada): o brilho de asas e armas não aparece mais por cima de bancos, paredes e outros personagens.",
       "Corrigido o brilho que saía do lugar ou sumia conforme o ângulo da câmera (asas de dragão, anjo, fênix)."
+    ]
+  },
+  {
+    title: "Árvore de Skills",
+    items: [
+      "Agora dá para aprender e evoluir skills pela própria árvore: clique no [+] do ícone e confirme. Gasta SP, não precisa do livro (quem tem o livro ainda pode usar).",
+      "Skill ainda não aprendida aparece apagada; o [+] só aparece quando o personagem tem classe, nível, atributos e SP. O tooltip mostra o SP ou o que falta.",
+      "Skills novas na árvore: Magnitude (Knight), Afterimage (Raider) e Shock, Blind, Hurricane, Mind Breaker, Sand Storm e Shield Breaker (Cleric, na página Meditation).",
+      "A janela da árvore ficou um pouco mais alta para caber a linha nova do Cleric.",
+      "Segurança: o servidor só aceita skills da árvore da classe do personagem."
+    ]
+  },
+  {
+    title: "Pincel Arco-íris",
+    items: [
+      "Novo pincel: a peça pintada muda de cor sem parar, passando pelo arco-íris. Todos os jogadores veem.",
+      "Os pincéis antigos continuam com cor fixa."
     ]
   },
   {
@@ -154,6 +171,7 @@ window.PATCH_NOTES = [
     title: "Correções",
     items: [
       "Consumíveis: ao usar um item, só ele fica escuro (antes escurecia o grupo todo, ex.: todos os scrolls por 3 segundos).",
+      "Item ou skill em recarga ficava todo preto: agora aparece escurecido, com a sombra girando por cima.",
       "O jogo não fecha mais quando uma skill de efeito contínuo (cura/regeneração) atinge outro jogador ou monstro.",
       "O jogo não fecha mais ao carregar certos mapas (iluminação dos objetos).",
       "Inventário embaralhando ao relogar ou teleportar (itens com prazo, Weapon Effect, personagens com [GM] no nome).",
@@ -436,6 +454,52 @@ window.VALIDATIONS = [
     ]
   },
   {
+    id: "skilltree", name: "Árvore de Skills", icon: "🌳",
+    tests: [
+      { id: "st-abrir", title: "Abrir a árvore em todas as classes",
+        steps: ["Abra a árvore (Alt+S → Árvore) com um personagem de cada grupo: Soldier, Muse, Hawker e Dealer.", "Troque entre as páginas da coluna da esquerda."],
+        expected: "A árvore abre com as linhas e os ícones no lugar; o jogo não fecha." },
+      { id: "st-novas", title: "Skills novas no lugar",
+        steps: ["Knight: página Weapon Mastery.", "Raider: página Combat Mastery.", "Cleric: página Meditation."],
+        expected: "Magnitude ao lado de Seismic Raid Impact, Afterimage ao lado de Prism Knife e as 6 do Cleric na linha de baixo da Meditation, todas ligadas por linha." },
+      { id: "st-aprender", title: "Aprender pelo [+]",
+        steps: ["Com um Cleric de nível 220+ e 100 SP, passe o mouse em Shock e clique no [+].", "Confirme."],
+        expected: "O tooltip mostra \"Clique em [+] para aprender (100 SP)\"; depois de confirmar, a skill fica colorida, entra na janela de skills e o SP diminui." },
+      { id: "st-sem-sp", title: "Sem SP ou sem nível",
+        steps: ["Com SP ou nível insuficiente, passe o mouse numa skill apagada e clique nela."],
+        expected: "Não aparece o [+]; o tooltip e a mensagem dizem o que falta (SP insuficiente ou nível/atributos)." },
+      { id: "st-classe", title: "Classe errada",
+        steps: ["Com um Mage, abra a página Meditation e passe o mouse nas 6 skills do Cleric."],
+        expected: "Nenhuma mostra o [+]; o tooltip diz que a classe não pode aprender." },
+      { id: "st-evoluir", title: "Evoluir pela árvore",
+        steps: ["Com uma skill aprendida e SP sobrando, clique no [+] dela várias vezes.", "Teste uma skill que aparece em 2 ícones na árvore (ex.: nível 1-5 num ícone e 6+ em outro) e suba do 5 para o 6."],
+        expected: "O nível sobe a cada clique e o SP é descontado; no nível 5 o [+] aparece no segundo ícone e a skill passa para o 6." },
+      { id: "st-livro", title: "Livro continua funcionando",
+        steps: ["Use um livro de skill que você ainda não tem (ex.: Shock)."],
+        expected: "A skill é aprendida pelo livro como antes, e a árvore mostra ela colorida." },
+      { id: "st-cliques", title: "Cliques na janela",
+        steps: ["Clique nos ícones da linha de baixo do Cleric e nos [+]."],
+        expected: "O clique não faz o personagem andar; a janela abre e fecha normal." }
+    ]
+  },
+  {
+    id: "pincel", name: "Pincel Arco-íris", icon: "🌈",
+    tests: [
+      { id: "pin-arco-usar", title: "Pintar com o arco-íris",
+        steps: ["Pegue o Pincel Arco-íris (item 614) e use numa peça equipável.", "Equipe a peça."],
+        expected: "O brilho da peça passa por todas as cores sem parar (volta completa em cerca de 4 segundos)." },
+      { id: "pin-arco-outros", title: "Outros jogadores veem",
+        steps: ["Peça para outro jogador olhar o seu personagem."],
+        expected: "Ele vê a mesma animação de cores." },
+      { id: "pin-arco-loja", title: "Loja pessoal",
+        steps: ["Com a peça arco-íris equipada, abra e feche a loja pessoal algumas vezes."],
+        expected: "O jogo não fecha; depois de fechar a loja o brilho volta a mudar de cor." },
+      { id: "pin-arco-antigos", title: "Pincéis antigos",
+        steps: ["Use os pincéis Branco a Verde em outras peças."],
+        expected: "Continuam com cor fixa, como antes." }
+    ]
+  },
+  {
     id: "vulkan", name: "Modo Vulkan e DLLs", icon: "🧩",
     tests: [
       { id: "vk-ligar", title: "Ligar e desligar",
@@ -469,6 +533,9 @@ window.VALIDATIONS = [
       { id: "fix-consumivel", title: "Escurecimento dos consumíveis",
         steps: ["Coloque na barra vários scrolls (teleporte, buff) e várias poções.", "Use um scroll e depois uma poção."],
         expected: "Só o item usado fica escuro. Tentar usar outro do mesmo grupo logo em seguida ainda mostra \"não pode usar duas vezes\"." },
+      { id: "fix-recarga-preto", title: "Ícone em recarga",
+        steps: ["Use uma poção e uma skill com recarga e olhe o ícone no inventário e na barra."],
+        expected: "O ícone aparece escurecido, com a sombra girando; não fica todo preto." },
       { id: "fix-skill-continua", title: "Skill de cura/regeneração em outros",
         steps: ["Em grupo, use skills de cura e regeneração nos colegas e em você.", "Fique perto de monstros que usam skills de efeito contínuo."],
         expected: "O jogo não fecha; o HP/MP sobe normalmente." },
