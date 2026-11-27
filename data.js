@@ -152,6 +152,34 @@ window.PATCH_NOTES = [
     ]
   },
   {
+    title: "Item Augment (Alt+T)",
+    items: [
+      "Nova janela para dar atributos a um equipamento usando gemas. Abre com Alt+T ou com o botão novo no topo do menu.",
+      "Arraste o equipamento para a janela, escolha o atributo e a quantidade (− / +) e clique em Aplicar. As barrinhas mostram o potencial: dourado já usado, azul o que vai aplicar e cinza o que está livre.",
+      "Até 10 aplicações por item. Cada uma gasta 4 gemas e dá +1 no atributo. Gemas: Destreza = Garnet, Força = Ruby, Concentração = Sapphire, Inteligência = Topaz, Sensibilidade = Emerald, Charme = Diamond, Velocidade de ataque = gema 357.",
+      "Aceita máscara, capacete, armadura, luva, bota, capa/mochila, arma e escudo. Não há como resetar.",
+      "O bônus fica no item: continua depois de trocar, vender na loja pessoal, guardar no baú, vestir na aba Visual, relogar ou trocar de canal.",
+      "O bônus aparece no tooltip no inventário, nos equipados, na aba Visual, na sua loja e na de outros jogadores, no trade, no baú e no item linkado no chat.",
+      "Item com augment ainda não pode ir ao leilão: aparece uma mensagem e o item fica no inventário."
+    ]
+  },
+  {
+    title: "Tooltip: Augment e Paint",
+    items: [
+      "Augment e pintura ganharam linhas próprias logo depois dos atributos do item: \"Augment: Destreza +10\" com 10/10 à direita e \"Paint: Color\" com o nome da pintura à direita.",
+      "O nome da pintura sai na cor dela; o arco-íris sai colorido letra por letra.",
+      "A linha \"[Paint: ...]\" de baixo do nome saiu."
+    ]
+  },
+  {
+    title: "Recarga das skills",
+    items: [
+      "O Charme reduz a recarga das skills: 1% a cada 10 de Charme, até no máximo 80%.",
+      "Os ícones em recarga mostram os segundos que faltam, nos ícones da barra de atalhos.",
+      "Tooltip da skill com os rótulos coloridos e uma linha nova \"Recarga\" com o tempo da skill (já com a redução do Charme)."
+    ]
+  },
+  {
     title: "Modo Vulkan (DXVK)",
     items: [
       "Opção no Alt+O → Vídeo que usa Vulkan no lugar do DirectX 9: pode dar mais FPS em muitas placas (principalmente AMD).",
@@ -497,6 +525,90 @@ window.VALIDATIONS = [
       { id: "pin-arco-antigos", title: "Pincéis antigos",
         steps: ["Use os pincéis Branco a Verde em outras peças."],
         expected: "Continuam com cor fixa, como antes." }
+    ]
+  },
+  {
+    id: "augment", name: "Item Augment", icon: "💎",
+    tests: [
+      { id: "aug-abrir", title: "Abrir a janela",
+        steps: ["Aperte Alt+T.", "Feche e abra de novo pelo botão novo no topo do menu."],
+        expected: "A janela do Item Augment abre nos dois jeitos." },
+      { id: "aug-recusado", title: "Item que não aceita augment",
+        steps: ["Arraste uma poção ou uma joia para a janela."],
+        expected: "Aparece a mensagem de que o item não pode receber augment." },
+      { id: "aug-aplicar", title: "Aplicar",
+        steps: ["Arraste uma arma, escolha Destreza, deixe 1 aplicação e tenha 4 Garnet no inventário.", "Clique em Aplicar e abra o Alt+A."],
+        expected: "A Destreza sobe 1, as 4 gemas somem do inventário e as barrinhas mostram 1 usada." },
+      { id: "aug-varias", title: "Várias aplicações de uma vez",
+        steps: ["Com gemas suficientes, aumente a quantidade com o + e aplique."],
+        expected: "O texto mostra quantas gemas vai gastar e quantas você tem; depois de aplicar, sobe o total escolhido." },
+      { id: "aug-charme-vel", title: "Charme e Velocidade de ataque",
+        steps: ["Na lista de atributos, escolha Charme (gema Diamond) e aplique.", "Repita com Velocidade de ataque (gema 357)."],
+        expected: "Os dois aparecem na lista e o bônus entra no personagem." },
+      { id: "aug-sem-gema", title: "Sem gemas suficientes",
+        steps: ["Escolha um atributo sem ter 4 gemas dele."],
+        expected: "O botão Aplicar fica apagado." },
+      { id: "aug-limite", title: "Limite de 10",
+        steps: ["Chegue a 10/10 num item e tente aplicar de novo."],
+        expected: "Não deixa aplicar mais." },
+      { id: "aug-relogar", title: "Relogar e trocar de canal",
+        steps: ["Com um item com augment equipado, relogue e depois troque de canal."],
+        expected: "O bônus continua no tooltip e nos atributos." },
+      { id: "aug-equipar", title: "Equipar e desequipar",
+        steps: ["Tire o item com augment e equipe de novo, olhando o Alt+A."],
+        expected: "O atributo desce ao tirar e sobe ao equipar." },
+      { id: "aug-visual", title: "Aba Visual",
+        steps: ["Vista um item com augment na aba Visual do inventário e passe o mouse nele.", "Relogue e passe o mouse de novo.", "Tire o item da aba Visual."],
+        expected: "O tooltip mostra o augment nas três vezes; o item volta para o inventário com o bônus." },
+      { id: "aug-loja", title: "Loja pessoal",
+        steps: ["Ponha o item com augment à venda e passe o mouse nele na sua loja.", "Outro jogador abre a sua loja, passa o mouse e compra."],
+        expected: "Você e ele veem o bônus; depois da compra o bônus continua no inventário dele." },
+      { id: "aug-trade", title: "Trade",
+        steps: ["Ponha o item com augment no trade e passe o mouse dos dois lados.", "Conclua a troca."],
+        expected: "Os dois veem o bônus; depois da troca o bônus continua com quem recebeu." },
+      { id: "aug-bau", title: "Baú",
+        steps: ["Guarde o item com augment no baú, troque de página e volte.", "Tire do baú."],
+        expected: "O tooltip mostra o bônus no baú e depois de tirar." },
+      { id: "aug-link", title: "Link no chat",
+        steps: ["Linke o item com augment no chat.", "Outro jogador passa o mouse no link."],
+        expected: "Em seguida aparece a linha do Augment no tooltip do link." },
+      { id: "aug-leilao", title: "Leilão",
+        steps: ["Tente colocar um item com augment no leilão.", "Coloque um item sem augment."],
+        expected: "O item com augment é recusado com a mensagem e fica no inventário; o item sem augment vai normal." }
+    ]
+  },
+  {
+    id: "tooltip-aug-paint", name: "Tooltip de Augment e Paint", icon: "🏷️",
+    tests: [
+      { id: "tt-augment", title: "Linha do Augment",
+        steps: ["Passe o mouse num item com augment."],
+        expected: "Logo depois dos atributos aparece \"Augment: Destreza +10\" (rótulo na cor dos outros rótulos, bônus em amarelo) e 10/10 em azul à direita, antes de [Classe: ...]." },
+      { id: "tt-augment-varios", title: "Vários atributos",
+        steps: ["Passe o mouse num item com augment em 3 ou mais atributos."],
+        expected: "Os 2 primeiros ficam na linha do Augment; os outros vão nas linhas de baixo, 2 por linha." },
+      { id: "tt-paint", title: "Linha do Paint",
+        steps: ["Passe o mouse num item pintado com um pincel comum e num com o Pincel Arco-íris."],
+        expected: "Aparece \"Paint: Color\" com o nome da pintura à direita, na cor dela; o arco-íris sai colorido letra por letra. Não aparece mais \"[Paint: ...]\" embaixo do nome." },
+      { id: "tt-sem-espaco", title: "Sem espaço sobrando",
+        steps: ["Passe o mouse num item só com pintura (ex.: roupa do Item Mall) e num item com pintura e augment."],
+        expected: "Não sobra linha preta vazia depois do Paint nem antes de [Classe: ...]." }
+    ]
+  },
+  {
+    id: "recarga", name: "Recarga das skills", icon: "⏱️",
+    tests: [
+      { id: "rc-segundos", title: "Segundos no ícone",
+        steps: ["Use uma skill com recarga longa e olhe o ícone na barra de atalhos."],
+        expected: "O ícone mostra os segundos que faltam, contando até sumir." },
+      { id: "rc-tooltip", title: "Tooltip da skill",
+        steps: ["Passe o mouse numa skill com recarga."],
+        expected: "Os rótulos aparecem coloridos e há a linha \"Recarga\" com o tempo." },
+      { id: "rc-charme", title: "Charme reduz a recarga",
+        steps: ["Anote a Recarga no tooltip de uma skill.", "Suba o Charme (ex.: +100) e olhe de novo.", "Use a skill várias vezes seguidas, assim que o ícone liberar."],
+        expected: "Com +100 de Charme a recarga cai 10%. A skill pode ser usada de novo assim que o ícone libera, sem mensagem de erro." },
+      { id: "rc-limite", title: "Limite de 80%",
+        steps: ["Com um personagem de Charme muito alto (800 ou mais), olhe a Recarga das skills."],
+        expected: "A recarga nunca fica menor que 20% do tempo normal." }
     ]
   },
   {
