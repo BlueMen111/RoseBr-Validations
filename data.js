@@ -84,7 +84,8 @@ window.PATCH_NOTES = [
       "9 pets novos, com duração de 180 dias: Joaninha, Sapo Príncipe, Marmota, Espírito do Fogo, do Vento, da Terra e da Água, Cachorro-Quente e Robozinho.",
       "Truques, danças, comer e banho ficam só para os pets Ronya; nos outros pets essas opções ficam travadas.",
       "Em duelo o pet não dá status (acessórios, runa e vínculo), igual às zonas PvP.",
-      "O bônus do pet só vale com o pet no mapa."
+      "O bônus do pet só vale com o pet no mapa.",
+      "Corrigido o corpo dos pets novos que sumia (ficava só a cabeça) e o preview do pet incompleto."
     ]
   },
   {
@@ -105,6 +106,48 @@ window.PATCH_NOTES = [
       "O jogo não fecha mais quando a placa de vídeo perde a tela (minimizar, trocar de janela, redimensionar).",
       "O reinício automático da tela por FPS baixo não age mais durante o teleporte nem fora do jogo.",
       "Login: conexões presas que nunca terminavam de entrar agora são limpas."
+    ]
+  },
+  {
+    title: "Gráficos no Alt+O → Vídeo",
+    items: [
+      "Novas opções (todas ficam salvas e podem ser ligadas e desligadas): Texturas nítidas (Desligado / 4x / 8x / 16x), VSync, Limite de FPS (Sem limite / 30 / 60 / 120 / 144), Sombras (Automático / Desligado / Baixa / Média / Alta), Brilho (glow), Neblina, Suavizar animações e Qualidade de textura.",
+      "O Anti-Aliasing passou a funcionar (a caixa existia, mas não fazia nada).",
+      "Qualidade de textura e Modo Vulkan valem ao reabrir o jogo; o resto vale na hora."
+    ]
+  },
+  {
+    title: "Efeitos de imagem (pós-processamento)",
+    items: [
+      "Bloom (Desligado / Fraco / Médio / Forte): espalha o brilho de armas, asas e skills, sem estourar céu, chão ou roupa clara.",
+      "Cores (Original / Vivas / Intensas), Contraste (Original / Médio / Alto) e Nitidez (Desligado / Leve / Forte).",
+      "FXAA: suaviza todas as bordas, inclusive cabelo, folhas e grades.",
+      "Vinheta: escurece levemente os cantos da tela.",
+      "A interface (janelas, chat, ícones) não é afetada. Tudo vem desligado; cada jogador escolhe."
+    ]
+  },
+  {
+    title: "Glow (brilho dos itens)",
+    items: [
+      "Brilho 30% mais suave em todos os itens.",
+      "Nova opção \"Brilho não atravessa objetos\" (ligada): o brilho de asas e armas não aparece mais por cima de bancos, paredes e outros personagens.",
+      "Corrigido o brilho que saía do lugar ou sumia conforme o ângulo da câmera (asas de dragão, anjo, fênix)."
+    ]
+  },
+  {
+    title: "Modo Vulkan (DXVK)",
+    items: [
+      "Opção no Alt+O → Vídeo que usa Vulkan no lugar do DirectX 9: pode dar mais FPS em muitas placas (principalmente AMD).",
+      "Vale ao reabrir o jogo. Se a placa não suportar, o jogo desliga sozinho e pede para abrir de novo.",
+      "Quem usa ReShade (outro d3d9.dll na pasta) não é afetado: o jogo não mexe nesse arquivo."
+    ]
+  },
+  {
+    title: "Janela e estabilidade",
+    items: [
+      "Alt+Enter: ao voltar para janela, o jogo não fica mais \"sempre no topo\" (Alt+Tab e outras janelas voltam a funcionar).",
+      "A imagem não fica esticada depois de trocar resolução ou alternar janela/tela cheia.",
+      "As bibliotecas necessárias (d3dx9_43, msvcp140, vcruntime140) vão junto com o jogo: fim do erro \"DLL não encontrada\"."
     ]
   },
   {
@@ -271,7 +314,10 @@ window.VALIDATIONS = [
         expected: "No duelo o bônus do pet some; no fim do duelo volta." },
       { id: "pet-fora", title: "Pet fora do mapa",
         steps: ["Equipe um pet sem nome (que não aparece) e veja os status."],
-        expected: "Sem o pet no mapa, não há bônus do pet." }
+        expected: "Sem o pet no mapa, não há bônus do pet." },
+      { id: "pet-corpo", title: "Corpo inteiro e preview",
+        steps: ["Equipe o Espírito da Terra e outros pets novos.", "Abra o preview do pet."],
+        expected: "O pet aparece inteiro (não só a cabeça) no mapa e no preview; roupa de pet continua funcionando." }
     ]
   },
   {
@@ -306,6 +352,115 @@ window.VALIDATIONS = [
       { id: "con-parado", title: "Sessão longa parada",
         steps: ["Deixe o personagem parado por 1 hora ou mais.", "Minimize e volte para o jogo algumas vezes."],
         expected: "Continua conectado e o jogo não fecha ao voltar." }
+    ]
+  },
+  {
+    id: "graficos", name: "Gráficos (Alt+O → Vídeo)", icon: "🖥️",
+    tests: [
+      { id: "gfx-rolagem", title: "Aba Vídeo completa",
+        steps: ["Abra Alt+O → Vídeo e role até o fim.", "Abra cada lista (combo)."],
+        expected: "Todas as opções aparecem com nome; nenhuma lista fica escondida atrás de outro controle; o aviso do rodapé aparece inteiro." },
+      { id: "gfx-aniso", title: "Texturas nítidas",
+        steps: ["Troque entre Desligado, 4x, 8x e 16x olhando o chão ao longe."],
+        expected: "O chão e as paredes ao longe ficam mais nítidos conforme o nível, na hora." },
+      { id: "gfx-aa", title: "Anti-Aliasing",
+        steps: ["Ligue e desligue o Anti-Aliasing e confirme."],
+        expected: "A tela pisca rapidamente e as bordas do personagem ficam suaves com ele ligado." },
+      { id: "gfx-vsync", title: "VSync",
+        steps: ["Ligue o VSync e gire a câmera rápido (Alt+F mostra o FPS)."],
+        expected: "O FPS acompanha o monitor (ex.: 60) e a imagem não \"rasga\"." },
+      { id: "gfx-fps", title: "Limite de FPS",
+        steps: ["Escolha 30, depois 60, depois Sem limite (Alt+F)."],
+        expected: "O FPS fica travado no valor escolhido; em Sem limite volta ao normal." },
+      { id: "gfx-sombras", title: "Sombras",
+        steps: ["Troque entre Desligado, Baixa, Média, Alta e Automático."],
+        expected: "A sombra some ou muda de nitidez; Automático volta ao valor do Desempenho/Qualidade." },
+      { id: "gfx-glow-neblina", title: "Brilho, Neblina e Suavizar animações",
+        steps: ["Desligue e ligue cada um."],
+        expected: "Brilho: some o glow dos itens. Neblina: o horizonte fica mais limpo. Animações: movimentos ficam picotados quando desligado." },
+      { id: "gfx-textura", title: "Qualidade de textura",
+        steps: ["Coloque em Baixa e reabra o jogo.", "Volte para Automático e reabra."],
+        expected: "Em Baixa o mundo fica mais simples (a interface continua nítida); em Automático volta ao normal." },
+      { id: "gfx-salvar", title: "Salvar e Restaurar",
+        steps: ["Mude várias opções, confirme e relogue.", "Use o botão Restaurar."],
+        expected: "Tudo fica salvo ao relogar; Restaurar não deixa a tela quebrada." }
+    ]
+  },
+  {
+    id: "posfx", name: "Efeitos de imagem", icon: "✨",
+    tests: [
+      { id: "pfx-bloom", title: "Bloom",
+        steps: ["Perto de arma, asa ou skill com brilho, troque Bloom Fraco / Médio / Forte."],
+        expected: "Só o brilho dos itens fica maior e mais espalhado; céu, chão e roupa clara não estouram; nada aparece deslocado." },
+      { id: "pfx-cores", title: "Cores e Contraste",
+        steps: ["Teste Vivas/Intensas e Médio/Alto."],
+        expected: "As cores ficam mais vivas e a imagem menos \"lavada\"." },
+      { id: "pfx-nitidez", title: "Nitidez",
+        steps: ["Teste Leve e Forte."],
+        expected: "A imagem fica mais definida, sem pontinhos ou chiado exagerado." },
+      { id: "pfx-fxaa", title: "FXAA",
+        steps: ["Ligue o FXAA e olhe cabelo, folhas e grades."],
+        expected: "As bordas ficam suaves." },
+      { id: "pfx-vinheta", title: "Vinheta",
+        steps: ["Ligue a Vinheta."],
+        expected: "Os cantos da tela escurecem levemente." },
+      { id: "pfx-ui", title: "Interface intacta",
+        steps: ["Com todos os efeitos ligados, abra inventário, mapa, chat e preview."],
+        expected: "A interface não muda de cor nem fica borrada; o mundo aparece normal (sem ícones ou texturas soltas no lugar dele)." },
+      { id: "pfx-reset", title: "Trocas com efeitos ligados",
+        steps: ["Com os efeitos ligados, troque VSync, Sombras, Brilho e Anti-Aliasing, minimize e volte, e use Alt+Enter."],
+        expected: "O jogo não fecha e a imagem continua certa depois de cada troca." },
+      { id: "pfx-fps", title: "Desempenho",
+        steps: ["Compare o FPS (Alt+F) com tudo desligado e com tudo ligado, numa cidade cheia."],
+        expected: "Anote a diferença; o jogo continua jogável." }
+    ]
+  },
+  {
+    id: "glow", name: "Glow (brilho dos itens)", icon: "💫",
+    tests: [
+      { id: "glow-atravessa", title: "Não atravessa objetos",
+        steps: ["Com asas ou arma com brilho, fique atrás de um banco, de um pilar e de outro personagem."],
+        expected: "O que está na frente cobre o brilho; ele só aparece na parte visível do item." },
+      { id: "glow-angulo", title: "Estável em qualquer ângulo",
+        steps: ["Gire a câmera toda em volta do personagem (de frente, de lado e de costas), de perto e de longe."],
+        expected: "O brilho fica colado no item, não pisca, não sai do lugar e não some." },
+      { id: "glow-aa", title: "Com e sem Anti-Aliasing",
+        steps: ["Repita o teste do banco com o Anti-Aliasing ligado e desligado."],
+        expected: "O brilho continua sem atravessar nos dois casos." },
+      { id: "glow-opcao", title: "Opção desligada",
+        steps: ["Desmarque \"Brilho não atravessa objetos\"."],
+        expected: "O brilho volta ao modo clássico (pode atravessar objetos, mas continua no lugar)." },
+      { id: "glow-itens", title: "Outros itens com brilho",
+        steps: ["Veja armas, roupas, montarias, pets e skills com brilho."],
+        expected: "Nenhum perdeu o brilho nem ficou com brilho estranho." }
+    ]
+  },
+  {
+    id: "vulkan", name: "Modo Vulkan e DLLs", icon: "🧩",
+    tests: [
+      { id: "vk-ligar", title: "Ligar e desligar",
+        steps: ["Marque \"Modo Vulkan (DXVK)\", confirme e reabra o jogo.", "Desmarque, confirme e reabra."],
+        expected: "Aparece o aviso para reabrir; com Vulkan o FPS costuma subir; desligado volta ao normal." },
+      { id: "vk-reshade", title: "ReShade preservado",
+        steps: ["Em um PC com ReShade (d3d9.dll próprio), tente ligar e desligar o Modo Vulkan."],
+        expected: "Aparece o aviso de que já existe outro d3d9.dll e o arquivo do ReShade não é alterado." },
+      { id: "vk-placa", title: "Placa sem suporte",
+        steps: ["Em um PC antigo/integrado, ligue o Modo Vulkan e reabra."],
+        expected: "Se não funcionar, o jogo mostra que desligou o Vulkan e abre normal na próxima vez." },
+      { id: "dll-falta", title: "Sem instalar dependências",
+        steps: ["Em um PC que nunca rodou o instalador de dependências, abra o jogo atualizado."],
+        expected: "O jogo abre sem erro de d3dx9_43.dll / MSVCP140.dll." }
+    ]
+  },
+  {
+    id: "janela", name: "Janela e tela", icon: "🪟",
+    tests: [
+      { id: "win-altenter", title: "Alt+Enter",
+        steps: ["Aperte Alt+Enter duas vezes (janela → tela cheia → janela).", "Use Alt+Tab e clique em outra janela."],
+        expected: "As outras janelas passam por cima do jogo normalmente." },
+      { id: "win-proporcao", title: "Proporção da imagem",
+        steps: ["Troque a resolução e alterne janela/tela cheia."],
+        expected: "A imagem não fica esticada nem achatada." }
     ]
   },
   {
